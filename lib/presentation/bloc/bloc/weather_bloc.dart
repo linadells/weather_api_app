@@ -10,7 +10,7 @@ part 'weather_state.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   WeatherRepository weatherRepository;
-  WeatherBloc(this.weatherRepository) : super(WeatherInitialState()) {
+  WeatherBloc(this.weatherRepository) : super(WeatherLoadingState()) {
     on<GetWeatherOfCurrentLocationEvent>(GetWeatherOfCurrentLocation);
     on<GetWeatherOfCityEvent>(GetWeatherOfCity);
   }
@@ -18,7 +18,18 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   GetWeatherOfCurrentLocation(GetWeatherOfCurrentLocationEvent event,
       Emitter<WeatherState> emit) async {
     try {
-      await Future.delayed(const Duration(seconds: 2));
+      LocationPermission permission;
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          emit(WeatherErrorState('Location permissions are denied'));
+        }
+      }
+      if (permission == LocationPermission.deniedForever) {
+        emit(WeatherErrorState(
+            'Location permissions are permanently denied, we cannot request permissions.'));
+      }
 
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.low);

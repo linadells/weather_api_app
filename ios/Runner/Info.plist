@@ -45,5 +45,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Ми використовуємо ваше місцезнаходження для відображення прогнозу погоди.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Ми використовуємо ваше місцезнаходження для забезпечення найкращого досвіду роботи.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Ваше місцезнаходження потрібне для відображення прогнозу погоди.</string>
 </dict>
 </plist>
