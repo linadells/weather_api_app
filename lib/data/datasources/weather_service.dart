@@ -24,12 +24,12 @@ class WeatherAPIService {
   Future<ForecastModel> getWeatherForecastByLocation(
       LocationEntity location, int days) async {
     final response = await http.get(Uri.parse(
-        '$baseUrl?key=$apiKey&q=${location.lon}, ${location.lat}&days=$days&aqi=no&alerts=no'));
+        '$baseUrl?key=$apiKey&q=${location.lat}, ${location.lon}&days=$days&aqi=no&alerts=no'));
 
     if (response.statusCode == 200) {
       return ForecastModel.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception('Couldn`t load forecast');
+      throw Exception(jsonDecode(response.body)['message']);
     }
   }
 }
