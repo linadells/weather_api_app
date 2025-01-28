@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen>
     controller =
         AnimationController(vsync: this, duration: Duration(seconds: 2));
     animation =
-        ColorTween(begin: Colors.black, end: Colors.white).animate(controller);
+        ColorTween(begin: Colors.black, end: kWhiteColor).animate(controller);
     controller.forward();
     controller.addStatusListener((status) {
       if (status.isCompleted)
