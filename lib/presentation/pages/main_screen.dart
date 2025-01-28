@@ -93,7 +93,14 @@ class _MainScreenState extends State<MainScreen> {
                         child: Column(
                           children: [
                             Text(forecast.cityName, style: kBigText),
-                            Icon(Icons.wb_sunny, size: 70, color: Colors.white),
+                            Image.network(
+                              forecast.todayWeather.icon.startsWith('http')
+                                  ? forecast.todayWeather.icon
+                                  : 'https:${forecast.todayWeather.icon}',
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ),
                             Text(
                                 '${forecast.todayWeather.currentTemp.toStringAsFixed(1)}°',
                                 style: kBigText),
@@ -124,13 +131,14 @@ class _MainScreenState extends State<MainScreen> {
                                             .format(dayForecast.date),
                                         style: kSmallText),
                                     Spacer(),
-                                    Icon(Icons.wb_sunny, color: Colors.orange),
-                                    // Image.network(
-                                    //   '${dayForecast.icon}',
-                                    //   width: 40,
-                                    //   height: 40,
-                                    //   fit: BoxFit.cover,
-                                    // ),
+                                    Image.network(
+                                      dayForecast.icon.startsWith('http')
+                                          ? dayForecast.icon
+                                          : 'https:${dayForecast.icon}', // Додаємо https, якщо потрібно
+                                      width: 40,
+                                      height: 40,
+                                      fit: BoxFit.cover,
+                                    ),
                                     SizedBox(width: 10),
                                     Text(
                                       '${dayForecast.temp}°',
