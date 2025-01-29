@@ -4,7 +4,8 @@ import 'package:weather_api_app/core/styles.dart';
 import 'package:weather_api_app/domain/entities/day_forecast.dart';
 import 'package:weather_api_app/domain/entities/forecast.dart';
 import 'package:weather_api_app/injection_container.dart';
-import 'package:weather_api_app/presentation/bloc/bloc/weather_bloc.dart';
+import 'package:weather_api_app/presentation/bloc/geo_bloc/geo_bloc.dart';
+import 'package:weather_api_app/presentation/bloc/weather_bloc/weather_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_api_app/presentation/pages/splash_screen.dart';
 
@@ -36,11 +37,20 @@ class _WeatherScreenState extends State<WeatherScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<WeatherBloc, WeatherState>(
       builder: (context, state) {
-        if (state is WeatherLoadingState)
-          return Center(
-            child: CircularProgressIndicator(),
+        if (state is WeatherLoadingState) {
+          return Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/location_background.jpg'),
+                  fit: BoxFit.cover),
+            ),
+            child: Center(
+              child: CircularProgressIndicator(
+                color: kWhiteColor,
+              ),
+            ),
           );
-        else if (state is WeatherLoadedState) {
+        } else if (state is WeatherLoadedState) {
           ForecastEntity forecast = state.forecastEntity;
           return Scaffold(
             appBar: AppBar(
@@ -66,21 +76,46 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     children: [
                       Row(
                         children: [
-                          Expanded(
-                            child: TextField(
-                              controller: _cityController,
-                              decoration: InputDecoration(
-                                hintText: 'Input city',
-                                hintStyle: kSmallText,
-                                filled: true,
-                                fillColor: kWhiteColor,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25),
-                                  borderSide: BorderSide.none,
-                                ),
+                          BlocBuilder<GeoBloc, GeoState>(
+                              builder: (context, geoState) {
+                            return Expanded(
+                              child: Autocomplete<String>(
+                                optionsBuilder: (TextEditingValue val) {
+                                  if (val.text.isEmpty) {
+                                    return [];
+                                  }
+                                  BlocProvider.of<GeoBloc>(context)
+                                      .add(GetCitiesEvent(val.text));
+                                  if (geoState is GeoSuggestionsState) {
+                                    return geoState.cities;
+                                  }
+                                  return [];
+                                },
+                                onSelected: (String selectedVal) {
+                                  _cityController.text = selectedVal;
+                                },
+                                fieldViewBuilder: (context, controller,
+                                    focusNode, onEditingComplete) {
+                                  _cityController.text = controller.text;
+                                  return TextField(
+                                    controller: controller,
+                                    focusNode: focusNode,
+                                    onEditingComplete: onEditingComplete,
+                                    decoration: InputDecoration(
+                                      hintText: 'Input city',
+                                      hintStyle: kSmallText,
+                                      filled: true,
+                                      fillColor: kWhiteColor,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(25),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
-                            ),
-                          ),
+                            );
+                          }),
                           IconButton(
                             icon: Icon(Icons.search, color: kWhiteColor),
                             onPressed: () {
@@ -178,15 +213,40 @@ class _WeatherScreenState extends State<WeatherScreen> {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: Text('Error'),
-                  content: Text(state.error),
-                  actions: <Widget>[
-                    TextButton(
-                      child: Text('ОК'),
-                      onPressed: () {
-                        _cityController.text = '';
-                        Navigator.pop(context);
-                      },
+                  title: Text(state.error),
+                  backgroundColor: kGreyColor,
+                  titleTextStyle: kBigText,
+                  contentTextStyle: kMediumText,
+                  content: Text(
+                      'Where do you want to try to find the weather forecast?'),
+                  actions: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          style: kButtonStyle,
+                          child: Text(
+                            'Another city',
+                            style: kSmallText,
+                          ),
+                          onPressed: () {
+                            _cityController.text = '';
+                            Navigator.pop(context);
+                          },
+                        ),
+                        TextButton(
+                            style: kButtonStyle,
+                            onPressed: () {
+                              _cityController.text = '';
+                              BlocProvider.of<WeatherBloc>(context).add(
+                                  const GetWeatherOfCurrentLocationEvent());
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              'Your location',
+                              style: kSmallText,
+                            ))
+                      ],
                     ),
                   ],
                 );

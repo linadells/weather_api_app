@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_api_app/injection_container.dart';
-import 'package:weather_api_app/presentation/bloc/bloc/weather_bloc.dart';
+import 'package:weather_api_app/presentation/bloc/geo_bloc/geo_bloc.dart';
+import 'package:weather_api_app/presentation/bloc/weather_bloc/weather_bloc.dart';
 import 'package:weather_api_app/presentation/pages/weather_screen.dart';
 import 'package:weather_api_app/presentation/pages/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDependencies();
-  runApp(BlocProvider(
-    create: (context) => WeatherBloc(sl()),
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider(
+        create: (context) => WeatherBloc(sl()),
+      ),
+      BlocProvider(
+        create: (context) => GeoBloc(sl()),
+      ),
+    ],
     child: const MainApp(),
   ));
 }

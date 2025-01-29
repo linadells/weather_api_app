@@ -1,4 +1,3 @@
-import 'package:http/http.dart';
 import 'package:weather_api_app/data/datasources/weather_service.dart';
 import 'package:weather_api_app/data/models/forecast.dart';
 import 'package:weather_api_app/domain/entities/forecast.dart';

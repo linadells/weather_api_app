@@ -20,3 +20,13 @@ const kSmallText = TextStyle(
 
 const kGreyColor = Color.fromARGB(255, 48, 47, 47);
 const kWhiteColor = Color.fromARGB(255, 244, 231, 231);
+
+final kButtonStyle = ButtonStyle(
+  textStyle: const WidgetStatePropertyAll(kSmallText),
+  backgroundColor: const WidgetStatePropertyAll(kWhiteColor),
+  shape: WidgetStatePropertyAll(
+    RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(25),
+    ),
+  ),
+);

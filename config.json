@@ -1,4 +1,5 @@
 {
-  "apiKey": "46ae163665ac48988d6140029252701",
-  "apiUrl": "http://api.weatherapi.com/v1/forecast.json"
+  "forecastApiKey": "46ae163665ac48988d6140029252701",
+  "forecastApiUrl": "http://api.weatherapi.com/v1/forecast.json",
+  "cityApiUrl": "https://nominatim.openstreetmap.org/search"
 }

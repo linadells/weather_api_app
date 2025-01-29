@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 
-class WeatherAPIService {
+class GeoService {
   final Dio _dio;
 
-  WeatherAPIService(this._dio);
+  GeoService(this._dio);
 
   Future<Response> getData(
       {required String baseUrl, Map<String, dynamic>? queryParams}) async {
@@ -16,7 +16,7 @@ class WeatherAPIService {
       return response;
     } on DioException catch (e) {
       throw Exception(
-          e.response?.data['error']['message'] ?? 'Error of getting forecast');
+          e.response?.data['error']['message'] ?? 'Error of getting cities');
     }
   }
 }
