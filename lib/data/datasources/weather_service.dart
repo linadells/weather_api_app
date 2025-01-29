@@ -1,35 +1,22 @@
-import 'dart:convert';
-
-import 'package:weather_api_app/data/models/forecast.dart';
-import 'package:http/http.dart' as http;
-import 'package:weather_api_app/domain/entities/location.dart';
+import 'package:dio/dio.dart';
 
 class WeatherAPIService {
-  final String baseUrl;
-  final String apiKey;
+  final Dio _dio;
 
-  WeatherAPIService({required this.apiKey, required this.baseUrl});
+  WeatherAPIService(this._dio);
 
-  Future<ForecastModel> getWeatherForecastByCity(String city, int days) async {
-    final response = await http.get(
-        Uri.parse('$baseUrl?key=$apiKey&q=$city&days=$days&aqi=no&alerts=no'));
-
-    if (response.statusCode == 200) {
-      return ForecastModel.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception(jsonDecode(response.body)['error']['message']);
-    }
-  }
-
-  Future<ForecastModel> getWeatherForecastByLocation(
-      LocationEntity location, int days) async {
-    final response = await http.get(Uri.parse(
-        '$baseUrl?key=$apiKey&q=${location.lat}, ${location.lon}&days=$days&aqi=no&alerts=no'));
-
-    if (response.statusCode == 200) {
-      return ForecastModel.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception(jsonDecode(response.body)['error']['message']);
+  Future<Response> getData(
+      {required String baseUrl, Map<String, dynamic>? queryParams}) async {
+    try {
+      final response = await _dio.get(baseUrl,
+          queryParameters: queryParams,
+          options: Options(headers: {
+            'accept': 'application/json',
+          }));
+      return response;
+    } on DioException catch (e) {
+      throw Exception(
+          e.response?.data['error']['message'] ?? 'Error of getting data');
     }
   }
 }

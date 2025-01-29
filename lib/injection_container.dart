@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:weather_api_app/data/datasources/weather_service.dart';
@@ -13,9 +14,10 @@ Future<void> initializeDependencies() async {
     final apiKey = await loadConfig("apiKey");
     final apiUrl = await loadConfig("apiUrl");
 
-    sl.registerSingleton(WeatherAPIService(apiKey: apiKey, baseUrl: apiUrl));
+    sl.registerSingleton<Dio>(Dio());
+    sl.registerSingleton(WeatherAPIService(sl()));
     sl.registerSingleton<WeatherRepository>(
-        WeatherRepositoryImpl(weatherApiService: sl()));
+        WeatherRepositoryImpl(sl(), apiKey, apiUrl));
   } catch (e) {
     print("Error during dependency registration: $e");
   }
