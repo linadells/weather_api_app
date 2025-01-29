@@ -7,6 +7,7 @@ const kBigText = TextStyle(
     color: kWhiteColor);
 
 const kMediumText = TextStyle(
+    decoration: TextDecoration.none,
     fontFamily: 'FiraSans',
     fontWeight: FontWeight.w300,
     fontSize: 25,
@@ -28,5 +29,16 @@ final kButtonStyle = ButtonStyle(
     RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(25),
     ),
+  ),
+);
+
+final kTextFieldDecoration = InputDecoration(
+  hintText: 'Input city',
+  hintStyle: kSmallText,
+  filled: true,
+  fillColor: kWhiteColor,
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(25),
+    borderSide: BorderSide.none,
   ),
 );

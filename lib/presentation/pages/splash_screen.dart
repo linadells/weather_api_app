@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weather_api_app/core/styles.dart';
-import 'package:weather_api_app/presentation/pages/weather_screen.dart';
+import 'package:weather_api_app/presentation/pages/main_screen.dart';
+import 'package:weather_api_app/presentation/widgets/background.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -25,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen>
     controller.addStatusListener((status) {
       if (status.isCompleted)
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => WeatherScreen()));
+            context, MaterialPageRoute(builder: (context) => MainScreen()));
     });
   }
 
@@ -38,12 +39,8 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/images/background.jpg'),
-              fit: BoxFit.cover),
-        ),
+      body: BackgroundWidget(
+        imageUrl: 'assets/images/background.jpg',
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

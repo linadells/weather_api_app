@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_api_app/injection_container.dart';
 import 'package:weather_api_app/presentation/bloc/geo_bloc/geo_bloc.dart';
 import 'package:weather_api_app/presentation/bloc/weather_bloc/weather_bloc.dart';
-import 'package:weather_api_app/presentation/pages/weather_screen.dart';
+import 'package:weather_api_app/presentation/pages/main_screen.dart';
 import 'package:weather_api_app/presentation/pages/splash_screen.dart';
 
 void main() async {
