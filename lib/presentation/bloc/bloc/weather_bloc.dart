@@ -44,7 +44,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
 
       emit(WeatherLoadedState(forecast));
     } catch (e) {
-      print(e);
+      emit(WeatherErrorState(e.toString()));
     }
   }
 
@@ -58,7 +58,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
 
       emit(WeatherLoadedState(forecast));
     } catch (e) {
-      print(e);
+      emit(WeatherErrorState(e.toString()));
     }
   }
 }

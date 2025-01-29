@@ -3,18 +3,19 @@ import 'package:intl/intl.dart';
 import 'package:weather_api_app/core/styles.dart';
 import 'package:weather_api_app/domain/entities/day_forecast.dart';
 import 'package:weather_api_app/domain/entities/forecast.dart';
+import 'package:weather_api_app/injection_container.dart';
 import 'package:weather_api_app/presentation/bloc/bloc/weather_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_api_app/presentation/pages/splash_screen.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class WeatherScreen extends StatefulWidget {
+  const WeatherScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<WeatherScreen> createState() => _WeatherScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _WeatherScreenState extends State<WeatherScreen> {
   late final TextEditingController _cityController;
 
   @override
@@ -52,7 +53,9 @@ class _MainScreenState extends State<MainScreen> {
             body: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/images/location_background.jpg'),
+                    image: AssetImage(forecast.todayWeather.isDay
+                        ? 'assets/images/day.jpg'
+                        : 'assets/images/night.jpeg'),
                     fit: BoxFit.cover),
               ),
               child: Padding(
@@ -84,6 +87,7 @@ class _MainScreenState extends State<MainScreen> {
                               BlocProvider.of<WeatherBloc>(context).add(
                                 GetWeatherOfCityEvent(_cityController.text),
                               );
+                              _cityController.text = '';
                             },
                           ),
                         ],
@@ -93,6 +97,9 @@ class _MainScreenState extends State<MainScreen> {
                         child: Column(
                           children: [
                             Text(forecast.cityName, style: kBigText),
+                            SizedBox(
+                              height: 5,
+                            ),
                             Image.network(
                               forecast.todayWeather.icon.startsWith('http')
                                   ? forecast.todayWeather.icon
@@ -100,6 +107,9 @@ class _MainScreenState extends State<MainScreen> {
                               width: 100,
                               height: 100,
                               fit: BoxFit.cover,
+                            ),
+                            SizedBox(
+                              height: 5,
                             ),
                             Text(
                                 '${forecast.todayWeather.currentTemp.toStringAsFixed(1)}°',
@@ -163,25 +173,80 @@ class _MainScreenState extends State<MainScreen> {
             ),
           );
         } else if (state is WeatherErrorState) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('Error'),
-                content: Text(state.error),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text('ОК'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Error'),
+                  content: Text(state.error),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text('ОК'),
+                      onPressed: () {
+                        _cityController.text = '';
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          });
         }
-        return SplashScreen();
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: kGreyColor,
+            title: Text(
+              'Weather App',
+              style: kMediumText,
+            ),
+          ),
+          body: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/day.jpg'),
+                  fit: BoxFit.cover),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _cityController,
+                            decoration: InputDecoration(
+                              hintText: 'Input city',
+                              hintStyle: kSmallText,
+                              filled: true,
+                              fillColor: kWhiteColor,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25),
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.search, color: kWhiteColor),
+                          onPressed: () {
+                            BlocProvider.of<WeatherBloc>(context).add(
+                              GetWeatherOfCityEvent(_cityController.text),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
       },
     );
   }

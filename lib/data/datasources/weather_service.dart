@@ -17,7 +17,7 @@ class WeatherAPIService {
     if (response.statusCode == 200) {
       return ForecastModel.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception('Couldn`t load forecast');
+      throw Exception(jsonDecode(response.body)['error']['message']);
     }
   }
 
@@ -29,7 +29,7 @@ class WeatherAPIService {
     if (response.statusCode == 200) {
       return ForecastModel.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception(jsonDecode(response.body)['message']);
+      throw Exception(jsonDecode(response.body)['error']['message']);
     }
   }
 }

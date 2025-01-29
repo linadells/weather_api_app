@@ -14,7 +14,6 @@ class WeatherRepositoryImpl implements WeatherRepository {
       return await weatherApiService.getWeatherForecastByLocation(
           location, days);
     } catch (e) {
-      // TODO:обробити
       rethrow;
     }
   }
@@ -23,7 +22,6 @@ class WeatherRepositoryImpl implements WeatherRepository {
     try {
       return await weatherApiService.getWeatherForecastByCity(city, days);
     } catch (e) {
-      // TODO:обробити
       rethrow;
     }
   }

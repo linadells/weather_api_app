@@ -27,7 +27,7 @@ flutter:
 
   assets:
     - config.json
-    - assets/images/location_background.jpg
+    - assets/images/
 
   fonts:
     - family: FiraSans

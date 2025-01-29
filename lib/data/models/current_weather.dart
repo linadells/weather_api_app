@@ -6,7 +6,8 @@ class CurrentWeatherModel extends CurrentWeatherEntity {
       required super.humidity,
       required super.icon,
       required super.maxTemp,
-      required super.minTemp});
+      required super.minTemp,
+      required super.isDay});
 
   factory CurrentWeatherModel.fromJson(Map<String, dynamic> json) {
     var todayForecast = json['forecast']['forecastday'].firstWhere((day) {
@@ -23,6 +24,7 @@ class CurrentWeatherModel extends CurrentWeatherEntity {
     double currentTemp = (minTemp + maxTemp) / 2;
 
     return CurrentWeatherModel(
+      isDay: json['current']['is_day'] == 1,
       currentTemp: currentTemp,
       humidity: json['current']['humidity'].toDouble(),
       icon: dayCondition['icon'],

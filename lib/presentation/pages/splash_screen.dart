@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_api_app/core/styles.dart';
-import 'package:weather_api_app/presentation/pages/main_screen.dart';
+import 'package:weather_api_app/presentation/pages/weather_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen>
     controller.addStatusListener((status) {
       if (status.isCompleted)
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => MainScreen()));
+            context, MaterialPageRoute(builder: (context) => WeatherScreen()));
     });
   }
 
