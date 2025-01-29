@@ -6,7 +6,7 @@ part 'geo_event.dart';
 part 'geo_state.dart';
 
 class GeoBloc extends Bloc<GeoEvent, GeoState> {
-  GeoRepository _geoRepository;
+  final GeoRepository _geoRepository;
   GeoBloc(this._geoRepository) : super(GeoInitialState()) {
     on<GetCitiesEvent>(_getCities);
   }

@@ -41,7 +41,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
           return Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage('assets/images/location_background.jpg'),
+                  image: AssetImage('assets/images/background.jpg'),
                   fit: BoxFit.cover),
             ),
             child: Center(
@@ -163,6 +163,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                             DayForecastEntity dayForecast =
                                 forecast.forecast[index];
                             return Card(
+                              color: kWhiteColor,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25),
                               ),
@@ -179,7 +180,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                     Image.network(
                                       dayForecast.icon.startsWith('http')
                                           ? dayForecast.icon
-                                          : 'https:${dayForecast.icon}', // Додаємо https, якщо потрібно
+                                          : 'https:${dayForecast.icon}',
                                       width: 40,
                                       height: 40,
                                       fit: BoxFit.cover,

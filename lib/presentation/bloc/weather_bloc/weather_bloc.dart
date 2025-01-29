@@ -5,6 +5,7 @@ import 'package:weather_api_app/domain/entities/location.dart';
 import 'package:weather_api_app/domain/repository/geo_repository.dart';
 import 'package:weather_api_app/domain/repository/weather_repository.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:weather_api_app/utils/location_helper.dart';
 
 part 'weather_event.dart';
 part 'weather_state.dart';
@@ -19,21 +20,9 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   _getWeatherOfCurrentLocation(GetWeatherOfCurrentLocationEvent event,
       Emitter<WeatherState> emit) async {
     try {
-      LocationPermission permission;
-      permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          emit(WeatherErrorState('Location permissions are denied'));
-        }
-      }
-      if (permission == LocationPermission.deniedForever) {
-        emit(WeatherErrorState(
-            'Location permissions are permanently denied, we cannot request permissions.'));
-      }
+      await LocationHelper.getLocationPermission();
 
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.low);
+      Position position = await Geolocator.getCurrentPosition();
 
       LocationEntity locationEntity =
           LocationEntity(lat: position.latitude, lon: position.longitude);

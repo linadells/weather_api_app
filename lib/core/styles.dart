@@ -19,7 +19,7 @@ const kSmallText = TextStyle(
     color: kGreyColor);
 
 const kGreyColor = Color.fromARGB(255, 48, 47, 47);
-const kWhiteColor = Color.fromARGB(255, 244, 231, 231);
+const kWhiteColor = Color.fromARGB(255, 239, 239, 239);
 
 final kButtonStyle = ButtonStyle(
   textStyle: const WidgetStatePropertyAll(kSmallText),

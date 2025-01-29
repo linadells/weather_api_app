@@ -8,6 +8,9 @@ sealed class GeoEvent extends Equatable {
 }
 
 final class GetCitiesEvent extends GeoEvent {
-  String cityPrefix;
-  GetCitiesEvent(this.cityPrefix);
+  final String cityPrefix;
+  const GetCitiesEvent(this.cityPrefix);
+
+  @override
+  List<Object> get props => [cityPrefix];
 }

@@ -11,6 +11,7 @@ class WeatherRepositoryImpl implements WeatherRepository {
 
   WeatherRepositoryImpl(this._weatherApiService, this._apiKey, this._baseUrl);
 
+  @override
   Future<ForecastEntity> getForecastByLocation(
       LocationEntity location, int days) async {
     try {
@@ -27,6 +28,7 @@ class WeatherRepositoryImpl implements WeatherRepository {
     }
   }
 
+  @override
   Future<ForecastEntity> getForecastByCity(String city, int days) async {
     try {
       final res = await _weatherApiService.getData(
